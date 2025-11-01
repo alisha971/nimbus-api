@@ -1,10 +1,14 @@
 # CELERY
 
 from celery import Celery
+import os
 
 # Use Redis as the broker and result backend
-BROKER_URL = "redis://localhost:6379/0"
-RESULT_BACKEND = "redis://localhost:6379/1"
+# BROKER_URL = "redis://localhost:6379/0"
+# RESULT_BACKEND = "redis://localhost:6379/1"
+
+BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
+RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/1")
 
 celery_app = Celery(
     "tasks",

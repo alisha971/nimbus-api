@@ -2,9 +2,13 @@ import mlflow
 import mlflow.sklearn
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LogisticRegression
+import os
 
-# Set the MLflow server we just started
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+# Get the MLflow server address from the environment variable
+# Inside Docker, this will be "http://mlflow:5000"
+tracking_uri = os.environ["MLFLOW_TRACKING_URI"]
+mlflow.set_tracking_uri(tracking_uri)
+print(f"Connecting to MLflow at {tracking_uri}") # <-- Good logging
 
 MODEL_NAME = "nimbus-classifier"
 

@@ -40,6 +40,8 @@ services:
       dockerfile: infra/Dockerfile
     ports:
       - "8000:8000"
+    volumes:
+      - mlflow_artifacts:/mlruns
     environment:
       # Use service names for internal Docker DNS
       MLFLOW_TRACKING_URI: http://mlflow:5000
@@ -55,6 +57,8 @@ services:
     build:
       context: .
       dockerfile: infra/Dockerfile
+    volumes:
+      - mlflow_artifacts:/mlruns
     environment:
       MLFLOW_TRACKING_URI: http://mlflow:5000
       CELERY_BROKER_URL: redis://redis:6379/0
