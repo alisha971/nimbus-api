@@ -4,9 +4,12 @@ __pycache__/
 *.pyc
 .env
 
-# MLflow (local)
+# MLflow local data folders
 mlruns/
-.mlflow.db
+mlartifacts/
+mlflow/
+# MLflow local database file
+mlflow.db
 
 # Docker
 .dockerignore
