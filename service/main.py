@@ -13,7 +13,7 @@ from pydantic import BaseModel
 
 # --- Settings ---
 # Set the MLflow URI. In a real app, this comes from env vars.
-os.environ["MLFLOW_TRACKING_URI"] = "http://127.0.0.1:5000"
+# os.environ["MLFLOW_TRACKING_URI"] = "http://127.0.0.1:5000"
 MODEL_NAME = "nimbus-classifier"
 MODEL_ALIAS = "production"
 

@@ -10,7 +10,7 @@ MODEL_ALIAS = "production"
 
 # Pre-load the model when the worker starts
 # Note: MLFLOW_TRACKING_URI must be set in the worker's environment!
-os.environ["MLFLOW_TRACKING_URI"] = "http://127.0.0.1:5000"
+# os.environ["MLFLOW_TRACKING_URI"] = "http://127.0.0.1:5000"
 model = mlflow.pyfunc.load_model(model_uri=f"models:/{MODEL_NAME}@{MODEL_ALIAS}")
 
 
