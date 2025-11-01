@@ -5,11 +5,11 @@ services:
   db:
     image: postgres:14
     environment:
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: secretpassword
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432" # Expose for local debugging
+      - "5433:5432" # Expose for local debugging
 
   redis:
     image: redis:7
@@ -17,12 +17,14 @@ services:
       - "6379:6379" # Expose for local debugging
 
   mlflow:
-    image: ghcr.io/mlflow/mlflow:latest
+    build:
+      context: .
+      dockerfile: infra/mlflow.Dockerfile  # <-- Point to your new file
     command: >
       mlflow server
       --host 0.0.0.0
       --port 5000
-      --backend-store-uri postgresql://postgres:mysecretpassword@db/postgres
+      --backend-store-uri postgresql://postgres:secretpassword@db/postgres
       --default-artifact-root /mlruns
     ports:
       - "5000:5000"
