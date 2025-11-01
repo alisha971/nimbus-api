@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+scikit-learn
+pandas
+mlflow
+psycopg2-binary
+celery
+redis
