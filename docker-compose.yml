@@ -1,0 +1,67 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Expose for local debugging
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379" # Expose for local debugging
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri postgresql://postgres:mysecretpassword@db/postgres
+      --default-artifact-root /mlruns
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_artifacts:/mlruns
+    depends_on:
+      - db
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # Use service names for internal Docker DNS
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      - redis
+      - mlflow
+    # This overrides the Dockerfile's CMD
+    command: ["uvicorn", "service.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      - redis
+      - mlflow
+    # Override the CMD to run a Celery worker
+    command: ["celery", "-A", "service.celery_config.celery_app", "worker", "--loglevel=info"]
+
+volumes:
+  postgres_data:
+  mlflow_artifacts:
