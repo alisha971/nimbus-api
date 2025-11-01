@@ -26,7 +26,7 @@ services:
       --port 5000
       --backend-store-uri postgresql://postgres:secretpassword@db/postgres
       --default-artifact-root /mlruns
-      --allowed-hosts 0.0.0.0  # <-- ADD THIS LINE (to accept connections from any host, which is safe inside your private Docker network)
+      --allowed-hosts 0.0.0.0  
     ports:
       - "5000:5000"
     volumes:
