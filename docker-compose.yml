@@ -26,7 +26,7 @@ services:
       --port 5000
       --backend-store-uri postgresql://postgres:secretpassword@db/postgres
       --default-artifact-root /mlruns
-      --allowed-hosts 0.0.0.0  
+      --allowed-hosts * 
     ports:
       - "5000:5000"
     volumes:
