@@ -6,3 +6,4 @@ mlflow
 psycopg2-binary
 celery
 redis
+google-cloud-storage
